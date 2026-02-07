@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Rose Day Surprise</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
+body{
+  height:100vh;
+  overflow:hidden;
+  background: linear-gradient(135deg,#ff1e56,#ff4d6d,#ff758f);
+  color:white;
+  text-align:center;
+}
+
+/* Floating Hearts */
+.floating{
+  position:fixed;
+  font-size:26px;
+  animation:float 8s linear infinite;
+  opacity:0.7;
+}
+@keyframes float{
+  0%{transform:translateY(100vh);}
+  100%{transform:translateY(-10vh);}
+}
+
+/* Screens */
+.screen{display:none;height:100vh;justify-content:center;align-items:center;flex-direction:column;padding:20px;}
+.show{display:flex;}
+
+button{
+  background:#fff;color:#ff1e56;border:none;
+  padding:12px 28px;border-radius:25px;
+  font-size:18px;margin-top:20px;cursor:pointer;font-weight:bold;
+}
+
+/* Typing */
+.typing{border-right:3px solid white;white-space:nowrap;overflow:hidden;}
+
+/* Envelope */
+.envelope{position:relative;width:280px;height:180px;background:#ffb3c6;border-radius:10px;cursor:pointer;}
+.flap{position:absolute;width:100%;height:100%;background:#ff8fab;clip-path:polygon(0 0,100% 0,50% 60%);transform-origin:top;transition:1s;}
+.open .flap{transform:rotateX(180deg);}
+.letter{
+  position:absolute;width:240px;height:150px;background:white;color:#333;
+  top:15px;left:20px;border-radius:8px;padding:15px;font-size:14px;
+  transform:translateY(40px);opacity:0;transition:1s;overflow:auto;
+}
+.open .letter{transform:translateY(-120px);opacity:1;}
+
+/* Gift */
+.gift{width:150px;height:150px;background:#ff4d6d;position:relative;border-radius:10px;cursor:pointer;}
+.lid{width:150px;height:40px;background:#c9184a;position:absolute;top:0;border-radius:10px 10px 0 0;transition:1s;}
+.gift.open .lid{transform:translateY(-80px);}
+.rose{font-size:50px;opacity:0;transition:1s;}
+.gift.open .rose{opacity:1;}
+</style>
+</head>
+
+<body>
+
+<!-- Floating Hearts -->
+<script>
+for(let i=0;i<20;i++){
+ let f=document.createElement("div");
+ f.className="floating";
+ f.style.left=Math.random()*100+"vw";
+ f.style.animationDuration=(5+Math.random()*5)+"s";
+ f.innerHTML="❤️";
+ document.body.appendChild(f);
+}
+</script>
+
+<!-- Music -->
+<audio autoplay loop>
+  <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mp3">
+</audio>
+
+<!-- Screen 1 -->
+<div class="screen show" id="s1">
+  <h1 class="typing" id="typeText"></h1>
+  <p>Aaj ka din sirf aapki smile ke naam, Madam Ji 💖</p>
+  <button onclick="next(2)">Let's Go</button>
+</div>
+
+<!-- Screen 2 Envelope -->
+<div class="screen" id="s2">
+  <h1>Ek chhota sa Rose Day Letter 💌</h1>
+  <div class="envelope" onclick="openEnvelope(this)">
+    <div class="flap"></div>
+    <div class="letter">
+      <b>To My Madam Ji,</b><br><br>
+      Kanak, aap bohot special ho.  
+      Aapki presence se sab better lagta hai.  
+      Hamesha khush raho, safe raho.  
+      Main hamesha respect ke saath aapke side hoon 💖<br><br>
+      <b>From your Sir Ji</b>
+    </div>
+  </div>
+  <button onclick="next(3)">Next</button>
+</div>
+
+<!-- Screen 3 Gift -->
+<div class="screen" id="s3">
+  <h1>Madam Ji ke liye ek surprise 🎁</h1>
+  <p>Touch the box to open</p>
+  <div class="gift" onclick="openGift(this)">
+    <div class="lid"></div>
+    <div class="rose">🌹</div>
+  </div>
+  <button onclick="next(1)">Again</button>
+</div>
+
+<script>
+function next(n){
+ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('show'));
+ document.getElementById('s'+n).classList.add('show');
+}
+
+/* Typing effect */
+let text="🌹 Happy Rose Day Kanak 🌹";
+let i=0;
+function typing(){
+ if(i<text.length){
+  document.getElementById("typeText").innerHTML+=text.charAt(i);
+  i++;setTimeout(typing,80);
+ }
+}
+typing();
+
+function openEnvelope(el){el.classList.toggle("open");}
+
+/* Gift + Confetti */
+function openGift(el){
+ el.classList.toggle("open");
+ for(let i=0;i<25;i++){
+   let c=document.createElement("div");
+   c.innerHTML="❤️";
+   c.style.position="fixed";
+   c.style.left=Math.random()*100+"vw";
+   c.style.top="50vh";
+   c.style.fontSize="20px";
+   c.style.animation="float 3s linear";
+   document.body.appendChild(c);
+   setTimeout(()=>c.remove(),3000);
+ }
+}
+
+/* Heart burst on click anywhere */
+document.addEventListener("click",function(e){
+ let h=document.createElement("div");
+ h.innerHTML="💖";
+ h.style.position="fixed";
+ h.style.left=e.clientX+"px";
+ h.style.top=e.clientY+"px";
+ h.style.fontSize="20px";
+ h.style.animation="float 2s linear";
+ document.body.appendChild(h);
+ setTimeout(()=>h.remove(),2000);
+});
+</script>
+
+</body>
+</html>
